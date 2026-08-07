@@ -315,6 +315,50 @@ body {
 .tray-title { font-family: 'GT Super', 'Playfair Display', serif; font-weight: 400; font-size: 18px; color: var(--dark-green); margin-bottom: 4px; }
 .tray-subtitle { font-size: 12px; color: var(--dark-leather); margin-bottom: 16px; }
 
+/* Tray header row — title/subtitle on the left, an optional control (e.g. the
+   gemstone origin toggle) pinned top-right */
+.tray-header-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.tray-header-row .tray-title { margin-bottom: 4px; }
+.tray-header-row .tray-subtitle { margin-bottom: 16px; }
+
+.gem-origin-toggle-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; }
+.gem-origin-label {
+  font-size: 11px; color: var(--dark-leather);
+  letter-spacing: 0.04em;
+  width: 72px;
+  white-space: nowrap;
+  text-align: center;
+}
+.gem-origin-toggle {
+  width: 45px; height: 24px;
+  padding: 0;
+  border: none;
+  border-radius: 1000px;
+  background: var(--dark-linen);
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.gem-origin-knob {
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: 0 2px 6px rgba(34,31,32,0.2);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s ease;
+}
+.gem-origin-knob::after {
+  content: '';
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--dark-gold);
+  transition: background-color 0.2s ease;
+}
+.gem-origin-toggle[aria-checked="true"] .gem-origin-knob { transform: translateX(21px); }
+.gem-origin-toggle[aria-checked="true"] .gem-origin-knob::after { background: var(--dark-green); }
+
 /* Skip this section — dims/disables the tray's own content, button itself stays untouched */
 .tray-body { transition: opacity 0.2s ease; }
 .tray-card.skipped .tray-body { opacity: 0.5; pointer-events: none; }
@@ -1695,8 +1739,18 @@ input[type="range"].size-slider::-moz-range-thumb {
       <div class="gem-mat-row">
         <div class="tray-card" id="tray-gemstone">
           <div class="tray-body">
-            <div class="tray-title">Gemstone Selection</div>
-            <div class="tray-subtitle">Add the gemstones that will compose your project</div>
+            <div class="tray-header-row">
+              <div>
+                <div class="tray-title">Gemstone Selection</div>
+                <div class="tray-subtitle">Add the gemstones that will compose your project</div>
+              </div>
+              <div class="gem-origin-toggle-wrap">
+                <span class="gem-origin-label" id="gem-origin-label">Natural</span>
+                <button type="button" class="gem-origin-toggle" id="gem-origin-toggle" role="switch" aria-checked="false" aria-label="Gemstone origin: Natural or Lab Grown">
+                  <span class="gem-origin-knob"></span>
+                </button>
+              </div>
+            </div>
             <div class="tray-items" id="gem-tray">
               <div class="add-card dashed-border" id="btn-open-gem-panel">+</div>
             </div>
@@ -1768,6 +1822,7 @@ const state = {
   gemSize: 0.25,
   selMaterial: null,
   notes: '',
+  gemOrigin: 'Natural', // 'Natural' | 'Lab Grown' — set via the toggle in the Gemstone Selection tray
   skipped: {}, // e.g. { 'tray-references': true } — populated by the Skip this section buttons
   searchModal: {
     query: '',
@@ -2689,6 +2744,16 @@ function renderMatTray() {
 }
 
 // ══════════════════════════════════════════
+// GEMSTONE ORIGIN TOGGLE — Natural / Lab Grown
+// ══════════════════════════════════════════
+document.getElementById('gem-origin-toggle').addEventListener('click', () => {
+  state.gemOrigin = state.gemOrigin === 'Natural' ? 'Lab Grown' : 'Natural';
+  const toggle = document.getElementById('gem-origin-toggle');
+  toggle.setAttribute('aria-checked', String(state.gemOrigin === 'Lab Grown'));
+  document.getElementById('gem-origin-label').textContent = state.gemOrigin;
+});
+
+// ══════════════════════════════════════════
 // NOTES TRAY
 // ══════════════════════════════════════════
 document.getElementById('notes-textarea').addEventListener('input', e => {
@@ -2952,7 +3017,7 @@ function openPDF() {
     // Gem + Material
     `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 ${MARGIN}px ${MARGIN}px;">`,
     '<div style="background:#F7F3EF;border-radius:6px;padding:14px 16px;">',
-    '<div style="font-size:10px;font-weight:500;color:#221F20;margin-bottom:3px;">Gemstone Selection<\/div>',
+    `<div style="font-size:10px;font-weight:500;color:#221F20;margin-bottom:3px;">Gemstone Selection${gemstones.length > 0 ? ` <span style="font-weight:400;color:#907843;">(${state.gemOrigin})<\/span>` : ''}<\/div>`,
     '<div style="font-size:8px;color:#766C63;margin-bottom:10px;">Add the gemstones that will compose your project<\/div>',
     `<div style="display:flex;flex-wrap:wrap;gap:8px;">${gemCardsH}<\/div>`,
     '<\/div>',

@@ -551,14 +551,20 @@ body {
   box-sizing: border-box;
   transition: border-color 0.15s, padding 0.15s;
   background: var(--dark-linen);
+  touch-action: manipulation;
 }
-.search-result-tile:hover,
 .search-result-tile.selected {
   padding: 3px;
-  border-color: var(--dark-linen);
-}
-.search-result-tile.selected {
   border-color: var(--dark-green);
+}
+@media (hover: hover) and (pointer: fine) {
+  .search-result-tile:hover {
+    padding: 3px;
+    border-color: var(--dark-linen);
+  }
+  .search-result-tile:hover .search-result-credit {
+    opacity: 1;
+  }
 }
 .search-result-tile img {
   width: 100%;

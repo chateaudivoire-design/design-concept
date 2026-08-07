@@ -48,26 +48,6 @@ body {
 }
 
 /* ═══════════════════════════════════════════
-   SITE NAV
-═══════════════════════════════════════════ */
-.site-nav {
-  background: var(--white);
-  border-bottom: 1px solid var(--dark-linen);
-  position: sticky; top: 0; z-index: 300;
-}
-.site-nav-inner {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 28px;
-}
-.nav-left { display: flex; align-items: center; gap: 18px; }
-.nav-hamburger { display: flex; flex-direction: column; gap: 4px; cursor: pointer; }
-.nav-hamburger span { width: 20px; height: 1px; background: var(--black-leather); display: block; }
-.nav-logo { font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 0.12em; color: var(--dark-gold); }
-.nav-right { display: flex; align-items: center; gap: 14px; }
-.nav-badge { font-size: 11px; font-weight: 500; color: var(--dark-gold); }
-.nav-icon { width: 20px; height: 20px; cursor: pointer; color: var(--black-leather); }
-
-/* ═══════════════════════════════════════════
    HERO
 ═══════════════════════════════════════════ */
 .hero {
@@ -1618,21 +1598,6 @@ input[type="range"].size-slider::-moz-range-thumb {
     </div>
   </div>
 </div>
-
-<!-- SITE NAV -->
-<nav class="site-nav">
-  <div class="site-nav-inner max-content">
-    <div class="nav-left">
-      <div class="nav-hamburger"><span></span><span></span><span></span></div>
-      <span class="nav-logo">CHATEAU D'IVOIRE</span>
-    </div>
-    <div class="nav-right">
-      <span class="nav-badge">2</span>
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    </div>
-  </div>
-</nav>
 
 <!-- ══════════════════════════════
      PAGE 1: SCOPE PHASE

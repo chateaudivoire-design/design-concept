@@ -791,7 +791,7 @@ body {
 .gem-mat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 
 /* Item cards in trays */
-.tray-items { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; min-height: 80px; }
+.tray-items { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; min-height: 80px; }
 
 /* "+" add card */
 .add-card {
@@ -1742,7 +1742,7 @@ input[type="range"].size-slider::-moz-range-thumb {
             <div class="tray-header-row">
               <div>
                 <div class="tray-title">Gemstone Selection</div>
-                <div class="tray-subtitle">Add the gemstones that will compose your project</div>
+                <div class="tray-subtitle">Add the gemstones that will compose your project.</div>
               </div>
               <div class="gem-origin-toggle-wrap">
                 <span class="gem-origin-label" id="gem-origin-label">Natural</span>
@@ -1760,7 +1760,7 @@ input[type="range"].size-slider::-moz-range-thumb {
         <div class="tray-card" id="tray-material">
           <div class="tray-body">
             <div class="tray-title">Material Selection</div>
-            <div class="tray-subtitle">Add the material that will be used</div>
+            <div class="tray-subtitle">Add the material that will be used.</div>
             <div class="tray-items" id="mat-tray">
               <div class="add-card dashed-border" id="btn-open-mat-panel">+</div>
             </div>
@@ -1773,7 +1773,7 @@ input[type="range"].size-slider::-moz-range-thumb {
       <div class="tray-card" id="tray-notes">
         <div class="tray-body">
           <div class="tray-title">Notes</div>
-          <div class="tray-subtitle">Anything else you'd like our team to know about your project?</div>
+          <div class="tray-subtitle">Anything else you'd like to add about your project?</div>
           <textarea class="notes-textarea" id="notes-textarea" placeholder="Add any additional notes, ideas, or requests here..."></textarea>
         </div>
         <button class="btn-skip-section" data-tray="tray-notes"><span class="skip-checkbox"></span>Skip this section</button>
@@ -3018,12 +3018,12 @@ function openPDF() {
     `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 ${MARGIN}px ${MARGIN}px;">`,
     '<div style="background:#F7F3EF;border-radius:6px;padding:14px 16px;">',
     `<div style="font-size:10px;font-weight:500;color:#221F20;margin-bottom:3px;">Gemstone Selection${gemstones.length > 0 ? ` <span style="font-weight:400;color:#907843;">(${state.gemOrigin})<\/span>` : ''}<\/div>`,
-    '<div style="font-size:8px;color:#766C63;margin-bottom:10px;">Add the gemstones that will compose your project<\/div>',
-    `<div style="display:flex;flex-wrap:wrap;gap:8px;">${gemCardsH}<\/div>`,
+    '<div style="font-size:8px;color:#766C63;margin-bottom:10px;">Add the gemstones that will compose your project.<\/div>',
+    `<div style="display:flex;flex-wrap:wrap;gap:8px;">${gemCardsH}<\/div>`, 
     '<\/div>',
     '<div style="background:#F7F3EF;border-radius:6px;padding:14px 16px;">',
     '<div style="font-size:10px;font-weight:500;color:#221F20;margin-bottom:3px;">Material Selection<\/div>',
-    '<div style="font-size:8px;color:#766C63;margin-bottom:10px;">Add the material that will be used<\/div>',
+    '<div style="font-size:8px;color:#766C63;margin-bottom:10px;">Add the material that will be used.<\/div>',
     `<div style="display:flex;flex-wrap:wrap;gap:8px;">${matCardsH}<\/div>`,
     '<\/div><\/div>',
     notesH,

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Next Chapter - Design Concept</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --dark-green: #364B37;
+  --olive-green: #ECF4E0;
+  --white: #FFFFFF;
+  --dark-leather: #766C63;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { min-height: 100%; }
+body {
+  background: var(--olive-green);
+  color: var(--dark-green);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+}
+.hero {
+  min-height: 208px;
+  background: var(--dark-green);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+}
+.hero-inner {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 32px 40px 24px;
+  position: relative;
+}
+.eyebrow, .breadcrumb {
+  color: rgba(255,255,255,0.65);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+.eyebrow { margin-bottom: 8px; }
+.title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 400;
+  line-height: 1.05;
+}
+.breadcrumb { color: rgba(255,255,255,0.45); margin-top: 64px; }
+.hero-mark {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  width: 36px;
+  transform: translateY(-50%);
+}
+.hero-mark svg { display: block; width: 100%; height: auto; }
+.content {
+  width: min(314px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 153px 0 72px;
+}
+.content h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 29px;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 18px;
+}
+.content p { color: var(--dark-leather); font-size: 10px; line-height: 1.8; }
+.lead { font-weight: 500; }
+.lead { margin-bottom: 34px; }
+.body-copy { margin-bottom: 19px; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.actions button {
+  min-height: 26px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font: 400 10px 'Montserrat', sans-serif;
+  cursor: pointer;
+}
+.primary { background: var(--dark-green); border: 1px solid var(--dark-green); color: var(--white); }
+.secondary { background: transparent; border: 1px solid rgba(54,75,55,0.35); color: var(--dark-green); }
+@media (max-width: 600px) {
+  .hero-inner { padding: 28px 24px 22px; }
+  .hero-mark { right: 24px; width: 30px; }
+  .breadcrumb { margin-top: 42px; }
+  .content { padding-top: 92px; }
+  .actions { gap: 10px; }
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Custom Jewelry Creation</div>
+    <div class="title">Design Concept</div>
+    <div class="breadcrumb">Our Services&nbsp; / &nbsp;Custom Jewelry Creation</div>
+    <div class="hero-mark" aria-hidden="true">
+      <svg viewBox="0 0 81 111" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 31h21.67v21.55H0zM0 60.38h21.67v21.41H0zM0 89.59h21.67V111H0zM29.67 60.38h21.67v21.41H29.67zM29.67 89.59h21.67V111H29.67zM59.33 31H81v21.55H59.33zM59.33 60.38H81v21.41H59.33zM59.33 89.59H81V111H59.33zM.15 23.21L10.88 0l10.73 23.21H.15zM59.54 23.21L70.25 0 81 23.21H59.54z" fill="white"/>
+      </svg>
+    </div>
+  </div>
+</header>
+<main class="content">
+  <h1>The Next Chapter</h1>
+  <p class="lead">Your design journey has begun. We invite you to experience the next phase in person.</p>
+  <p class="body-copy">While your digital Design Concept is safely in your inbox, high jewelry is an experience of the senses. We invite you to step into our universe. Book a private appointment at our boutique to review your concepts, examine materials in the light, and finalize your bespoke design with our master consultants.</p>
+  <div class="actions">
+    <button class="primary" type="button">Book an appointment</button>
+    <button class="secondary" type="button">Live Chat with an expert</button>
+  </div>
+</main>
+</body>
+</html>

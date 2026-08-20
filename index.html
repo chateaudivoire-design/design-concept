@@ -1176,7 +1176,6 @@ input[type="range"].size-slider::-moz-range-thumb {
 .modal-step { display: none; padding: 56px 40px; }
 .modal-step.active { display: flex; flex-direction: column; }
 .modal-step-info.active { align-items: center; justify-content: center; gap: 18px; text-align: center; }
-.modal-step-next.active { justify-content: center; gap: 20px; }
 
 .modal-save-title {
   font-family: 'Playfair Display', serif;
@@ -1228,28 +1227,6 @@ input[type="range"].size-slider::-moz-range-thumb {
 }
 .btn-modal-submit:hover { background: var(--black-green); }
 
-.modal-next-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 32px; color: var(--dark-green); font-weight: 400;
-}
-.modal-next-lead { font-size: 14px; color: var(--dark-leather); font-weight: 500; line-height: 1.7; }
-.modal-next-body { font-size: 12px; color: var(--dark-leather); line-height: 1.8; font-weight: 300; }
-.modal-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
-.btn-modal-primary {
-  padding: 11px 22px; border-radius: 20px;
-  background: var(--dark-green); color: var(--white);
-  border: none; font-family: 'Montserrat', sans-serif;
-  font-size: 12px; cursor: pointer; transition: opacity 0.2s;
-}
-.btn-modal-primary:hover { opacity: 0.9; }
-.btn-modal-secondary {
-  padding: 11px 22px; border-radius: 20px;
-  background: transparent; color: var(--dark-green);
-  border: 1px solid rgba(54,75,55,0.25);
-  font-family: 'Montserrat', sans-serif; font-size: 12px;
-  cursor: pointer; transition: all 0.2s;
-}
-.btn-modal-secondary:hover { border-color: var(--dark-green); color: var(--black-green); }
 .modal-close {
   position: absolute; top: 16px; right: 20px;
   width: 28px; height: 28px;
@@ -1586,16 +1563,6 @@ input[type="range"].size-slider::-moz-range-thumb {
       <div class="modal-sent-msg" id="modal-sent-msg">Project sent!</div>
     </div>
 
-    <!-- Step 2: The Next Chapter (Submit flow only — Save it for later skips this) -->
-    <div class="modal-step modal-step-next" id="modal-step-next">
-      <div class="modal-next-title">The Next Chapter</div>
-      <div class="modal-next-lead">Your design journey has begun. We invite you to experience the next phase in person.</div>
-      <div class="modal-next-body">While your digital Design Concept is safely in your inbox, high jewelry is an experience of the senses. We invite you to step into our universe. Book a private appointment at our boutique to review your concepts, examine materials in the light, and finalize your bespoke design with our master consultants.</div>
-      <div class="modal-actions">
-        <button class="btn-modal-primary">Book an Appointment</button>
-        <button class="btn-modal-secondary">Go to our collection</button>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -2733,20 +2700,10 @@ document.getElementById('notes-textarea').addEventListener('input', e => {
 
 // ══════════════════════════════════════════
 // SUBMIT / SAVE IT FOR LATER → MODAL
-// Both open the same Confirmator modal, which now runs as two sequential
-// steps: (1) name + email, (2) "The Next Chapter" boutique outreach.
-// Submit advances to step 2 after sending, since the project is being
-// finalized. Save it for later skips step 2 entirely — the appointment
-// pitch doesn't fit someone who isn't done yet — and leaves the project's
-// collected data intact afterward instead of resetting it.
+// Both open the same Confirmator modal. Submit continues to the next page
+// after sending, while Save it for later closes after the confirmation.
 // ══════════════════════════════════════════
 let modalMode = 'submit';
-
-function goToStep(n) {
-  document.getElementById('modal-box').dataset.step = String(n);
-  document.getElementById('modal-step-info').classList.toggle('active', n === 1);
-  document.getElementById('modal-step-next').classList.toggle('active', n === 2);
-}
 
 function resetConfirmatorFields() {
   document.getElementById('modal-name-input').value = '';
@@ -2761,7 +2718,6 @@ function resetConfirmatorFields() {
 function openConfirmator(mode) {
   modalMode = mode;
   resetConfirmatorFields();
-  goToStep(1);
   document.getElementById('modal-overlay').classList.add('visible');
   document.body.style.overflow = 'hidden';
 }
@@ -2782,7 +2738,7 @@ document.getElementById('modal-overlay').addEventListener('click', e => {
 });
 
 // ══════════════════════════════════════════
-// STEP 1 → EMAIL SEND + PDF, THEN STEP 2 (Submit only)
+// STEP 1 → EMAIL SEND + PDF, THEN NEXT PAGE (Submit only)
 // ══════════════════════════════════════════
 document.getElementById('modal-send-btn').addEventListener('click', () => {
   const nameField = document.getElementById('modal-name-input');
@@ -2813,12 +2769,10 @@ document.getElementById('modal-send-btn').addEventListener('click', () => {
       document.body.style.overflow = '';
     }, 1800);
   } else {
-    // Submit — advance to "The Next Chapter" once the PDF has had a chance
-    // to open, and clear the project's collected images since this is the
-    // final step.
+    // Submit — open the next page once the PDF has had a chance to open.
     setTimeout(() => {
-      goToStep(2);
       state.images = [];
+      window.location.href = 'next-chapter.html';
     }, 1800);
   }
 });

@@ -130,8 +130,9 @@ body {
   gap: 8px;
 }
 .style-pill {
-  padding: 10px;
-  display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 8px;
+  min-height: 65px;
+  padding: 10px 20px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
   border: 1px solid var(--dark-green);
   border-radius: var(--radius);
   background: transparent;
@@ -144,22 +145,7 @@ body {
 }
 .style-pill:hover { background: rgba(54,75,55,0.06); }
 .style-pill.selected { background: var(--dark-linen); }
-.style-pill-illustration {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: calc(var(--radius) - 4px);
-  background: #fff;
-}
-.style-pill-illustration img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
+.style-pill-illustration { width: 100%; } /* reserved for a future icon/illustration; empty for now */
 .style-pill-label { line-height: 1.2; }
 
 /* Scope footer */
@@ -1883,59 +1869,15 @@ function injectCastle() {
 // SCOPE PHASE
 // ══════════════════════════════════════════
 const STYLES_BY_TYPE = {
-  Bracelet: ['Chain', 'Tennis', 'Link', 'Bangle', 'Cuff'],
+  Bracelet: ['Cable', 'Chain', 'Tennis', 'Link', 'Bangle', 'Cuff'],
   Earrings: ['Hoop', 'Studs', 'Dangling', 'Huggies', 'During'],
   Ring: ['Solitaire', 'Band', 'Three-stone', 'Bezel'],
   Pendant: ['Solitaire', 'Locket'],
-  Necklace: ['Chain', 'Tennis', 'Station', 'Collar', 'Lariat'],
+  Necklace: ['Chain', 'Choker', 'Tennis', 'Station', 'Collar', 'Graduate', 'Lariat', 'Statement'],
   // 'Other' has no preset list — a free-text field is shown instead
 };
 
 state.style = '';
-
-// Explicit lookup of each style pill's illustration, sourced from
-// assets/UI/<Type>_Style/... in the design-concept repo. Filenames don't
-// follow one consistent pattern (casing/typos vary in the source repo), so
-// this is a direct map rather than a computed path.
-// NOTE: Bracelet "Chain" currently points at the same file as "Bangle" —
-// that came from the provided source list and looks like a copy/paste slip;
-// swap in the correct Chain image URL here once available.
-const STYLE_IMAGES = {
-  Bracelet: {
-    Chain: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Bracelet_Style/Style-Bracelet-Bangle.jpg',
-    Link: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Bracelet_Style/Style-Bracelet-Link.jpg',
-    Cuff: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Bracelet_Style/Style-Bracelet-Cuff.jpg',
-    Tennis: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Bracelet_Style/Style-Bracelet-Tennis.jpg',
-    Bangle: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Bracelet_Style/Style-Bracelet-Bangle.jpg',
-  },
-  Ring: {
-    Solitaire: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Ring_Style/Style-Ring-Solitaire.jpg',
-    Band: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Ring_Style/Style-Ring-Band.jpg',
-    'Three-stone': 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Ring_Style/Style-Ring-Three_Stones.jpg',
-    Bezel: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Ring_Style/Style-Ring-Three_Bazel.jpg',
-  },
-  Earrings: {
-    Hoop: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Earring_Style/Style-Earring-Hoop.jpg',
-    Studs: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Earring_Style/Style-Earring-Stud.jpg',
-    Dangling: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Earring_Style/Style-Earring-Dangling.jpg',
-    Huggies: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Earring_Style/Style-Earring-Huggie.jpg',
-    During: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Earring_Style/Style-Earring-During.jpg',
-  },
-  Pendant: {
-    Solitaire: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Pendant_Style/Style-Pendant-Solitaire.jpg',
-    Locket: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Pendant_Style/Style-Pendant-Locket.jpg',
-  },
-  Necklace: {
-    Chain: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Necklace_Style/Style-Necklace-Chain.jpg',
-    Tennis: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Necklace_Style/Style-Necklace-Tennis.jpg',
-    Station: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Necklace_Style/Style-Necklace-Station.jpg',
-    Collar: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Necklace_Style/Style-Necklace-Collar.jpg',
-    Lariat: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/refs/heads/main/assets/UI/Necklace_Style/Style-Necklace-Loriat.jpg',
-  },
-};
-function stylePillImageURI(type, style) {
-  return (STYLE_IMAGES[type] && STYLE_IMAGES[type][style]) || '';
-}
 
 function revealStep(id) {
   const el = document.getElementById(id);
@@ -1968,11 +1910,7 @@ function renderStyleStep(type) {
     const pill = document.createElement('div');
     pill.className = 'style-pill';
     pill.dataset.style = style;
-    const imgSrc = stylePillImageURI(type, style);
-    const imgHTML = imgSrc
-      ? `<div class="style-pill-illustration"><img src="${imgSrc}" alt="${style}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`
-      : '';
-    pill.innerHTML = `${imgHTML}<div class="style-pill-label">${style}</div>`;
+    pill.innerHTML = `<div class="style-pill-illustration"></div><div class="style-pill-label">${style}</div>`;
     pill.addEventListener('click', () => {
       document.querySelectorAll('.style-pill').forEach(p => p.classList.remove('selected'));
       pill.classList.add('selected');

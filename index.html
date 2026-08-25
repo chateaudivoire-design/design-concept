@@ -123,29 +123,27 @@ body {
   margin-top: 14px;
 }
 
-/* Style pills — mirrors jewelry-pill, with a reserved (currently empty) illustration slot */
+/* Style pills */
 .style-pills {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
 }
 .style-pill {
-  padding: 10px;
-  display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 8px;
+  padding: 14px;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 12px;
   border: 1px solid var(--dark-green);
   border-radius: var(--radius);
   background: transparent;
   font-family: 'Montserrat', sans-serif;
   font-size: 13px; color: var(--black-leather);
   cursor: pointer;
-  transition: background 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s;
   user-select: none;
   text-align: center;
 }
-.style-pill:hover { background: rgba(54,75,55,0.06); }
-.style-pill:hover .style-pill-illustration { border-color: var(--dark-gold); }
-.style-pill.selected { background: var(--dark-linen); }
-.style-pill.selected .style-pill-illustration { border-color: var(--dark-green); box-shadow: 0 0 0 1px var(--dark-green); }
+.style-pill:hover { border-color: var(--dark-gold); }
+.style-pill.selected { border-color: var(--dark-green); box-shadow: inset 0 0 0 1px var(--dark-green); }
 .style-pill-illustration {
   width: 100%;
   aspect-ratio: 4 / 3;
@@ -153,11 +151,7 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: calc(var(--radius) - 2px);
-  background: var(--white);
-  border: 1px solid var(--dark-linen);
-  padding: 16px;
-  transition: border-color 0.15s;
+  background: transparent;
 }
 .style-pill-illustration img {
   width: 100%;
@@ -165,16 +159,15 @@ body {
   object-fit: contain;
   display: block;
 }
-/* Necklace illustrations: sit flush against the top edge and let the drawing
-   bleed past the bottom of the frame, so the chain reads as continuing
-   beyond the card rather than floating inside it. */
+/* Necklace illustrations (other than Collar) are top-aligned so the chain
+   sits flush against the top edge of the card instead of floating centered
+   in empty space — but the full drawing always stays intact, never cropped. */
 .style-pills--necklace .style-pill-illustration { aspect-ratio: 3 / 4; }
-.style-pill-illustration--crop-top {
-  padding: 0;
+.style-pill-illustration--top-aligned {
   align-items: flex-start;
 }
-.style-pill-illustration--crop-top img {
-  object-fit: cover;
+.style-pill-illustration--top-aligned img {
+  object-fit: contain;
   object-position: top center;
 }
 .style-pill-label { line-height: 1.2; }
@@ -193,7 +186,7 @@ body {
   padding: 40px;
 }
 .scope-footer-content {
-  max-width: 650px;
+  max-width: 1500px;
   width: 100%;
 }
 .scope-footer-label { font-size: 11px; color: var(--dark-leather); letter-spacing: 0.04em; margin-bottom: 12px; text-align: center; }
@@ -1984,11 +1977,11 @@ function renderStyleStep(type) {
     pill.className = 'style-pill';
     pill.dataset.style = style;
     const imgSrc = stylePillImageURI(type, style);
-    // Necklace illustrations (other than Collar) are cropped flush to the
-    // top of their frame, so the chain reads as continuing past the edge
-    // rather than floating inside it.
-    const cropTop = type === 'Necklace' && style !== 'Collar';
-    const illustrationClass = cropTop ? 'style-pill-illustration style-pill-illustration--crop-top' : 'style-pill-illustration';
+    // Necklace illustrations (other than Collar) are top-aligned so the
+    // chain sits flush against the top edge of the frame, without cropping
+    // any part of the drawing.
+    const topAligned = type === 'Necklace' && style !== 'Collar';
+    const illustrationClass = topAligned ? 'style-pill-illustration style-pill-illustration--top-aligned' : 'style-pill-illustration';
     const imgHTML = imgSrc
       ? `<div class="${illustrationClass}"><img src="${imgSrc}" alt="${type} style: ${style}" loading="lazy" onerror="this.parentElement.style.display='none'"></div>`
       : '';

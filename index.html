@@ -130,6 +130,8 @@ body {
   gap: 20px;
 }
 .style-pill {
+  min-height: 150px;
+  max-height: 240px;
   padding: 14px;
   display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 12px;
   border: 1px solid var(--dark-green);
@@ -146,7 +148,8 @@ body {
 .style-pill.selected { border-color: var(--dark-green); box-shadow: inset 0 0 0 1px var(--dark-green); }
 .style-pill-illustration {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  flex: 1 1 auto;
+  min-height: 0; /* lets the flex child shrink below its content size so the card's max-height is respected */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -162,7 +165,6 @@ body {
 /* Necklace illustrations (other than Collar) are top-aligned so the chain
    sits flush against the top edge of the card instead of floating centered
    in empty space — but the full drawing always stays intact, never cropped. */
-.style-pills--necklace .style-pill-illustration { aspect-ratio: 3 / 4; }
 .style-pill-illustration--top-aligned {
   align-items: flex-start;
 }
@@ -170,7 +172,7 @@ body {
   object-fit: contain;
   object-position: top center;
 }
-.style-pill-label { line-height: 1.2; }
+.style-pill-label { line-height: 1.2; flex: 0 0 auto; }
 
 /* Scope footer */
 .scope-footer {
@@ -1307,7 +1309,7 @@ input[type="range"].size-slider::-moz-range-thumb {
   .hero-icon svg { width: 36px; height: 50px; }
   .scope-footer-inner { padding: 20px 20px 24px; max-height: none; overflow: visible; }
   .scope-footer { max-height: none; }
-  .jewelry-pills, .style-pills {
+  .jewelry-pills {
     grid-auto-flow: column;
     grid-template-columns: none;
     grid-template-rows: repeat(2, 1fr);
@@ -1315,8 +1317,12 @@ input[type="range"].size-slider::-moz-range-thumb {
     max-height: 160px;
     overflow-y: auto;
   }
+  .style-pills {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+  }
   .jewelry-pill { height: 52px; padding: 0 14px; font-size: 12px; }
-  .style-pill { min-height: 52px; padding: 8px 14px; font-size: 12px; }
+  .style-pill { min-height: 150px; max-height: 240px; padding: 10px; font-size: 12px; }
   .scope-inputs-row { flex-direction: column; align-items: stretch; }
   .budget-field, .scope-input, #style-text-input, .btn-start { width: 100%; }
   .btn-start { text-align: center; }
@@ -1894,9 +1900,9 @@ function injectCastle() {
 // ══════════════════════════════════════════
 const STYLES_BY_TYPE = {
   Bracelet: ['Chain', 'Tennis', 'Link', 'Bangle', 'Cuff'],
-  Earrings: ['Hoop', 'Studs', 'Dangling', 'Huggies', 'During'],
+  Earrings: ['Hoop', 'Stud', 'Dangling', 'Huggie', 'During'],
   Ring: ['Solitaire', 'Band', 'Three-stone', 'Bezel'],
-  Pendant: ['Solitaire', 'Locket'],
+  Pendant: ['Solitaire', 'Locket', 'Medallion'],
   Necklace: ['Chain', 'Tennis', 'Station', 'Collar', 'Lariat'],
   // 'Other' has no preset list — a free-text field is shown instead
 };
@@ -1905,38 +1911,39 @@ state.style = '';
 
 // Explicit lookup of each style pill's illustration, sourced from
 // assets/UI/Jewelry_Style-<Type>-<Style>.svg in the design-concept repo,
-// pinned to commit a28adccbbaed96d575488f40992883ee2906e1ec.
+// pinned per-type to specific commits.
 const STYLE_IMAGES = {
   Bracelet: {
-    Chain: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Bracelet-Chain.svg',
-    Tennis: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Bracelet-Tennis.svg',
-    Link: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Bracelet-Link.svg',
-    Bangle: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Bracelet-Bangle.svg',
-    Cuff: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Bracelet-Cuff.svg',
+    Chain: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/d4aeb218938c97c7319d50b7208368c6074033af/assets/UI/Jewelry_Style-Bracelet-Chain.svg',
+    Tennis: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/d4aeb218938c97c7319d50b7208368c6074033af/assets/UI/Jewelry_Style-Bracelet-Tennis.svg',
+    Link: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/d4aeb218938c97c7319d50b7208368c6074033af/assets/UI/Jewelry_Style-Bracelet-Link.svg',
+    Bangle: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/d4aeb218938c97c7319d50b7208368c6074033af/assets/UI/Jewelry_Style-Bracelet-Bangle.svg',
+    Cuff: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/d4aeb218938c97c7319d50b7208368c6074033af/assets/UI/Jewelry_Style-Bracelet-Cuff.svg',
   },
   Earrings: {
-    Hoop: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Earrings-Hoop.svg',
-    Studs: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Earrings-Studs.svg',
-    Dangling: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Earrings-Dangling.svg',
-    Huggies: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Earrings-Huggies.svg',
-    During: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Earrings-During.svg',
+    Hoop: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/d4aeb218938c97c7319d50b7208368c6074033af/assets/UI/Jewelry_Style-Earrings-Hoop.svg',
+    Stud: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/d4aeb218938c97c7319d50b7208368c6074033af/assets/UI/Jewelry_Style-Earrings-Stud.svg',
+    Dangling: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/d4aeb218938c97c7319d50b7208368c6074033af/assets/UI/Jewelry_Style-Earrings-Dangling.svg',
+    Huggie: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/d4aeb218938c97c7319d50b7208368c6074033af/assets/UI/Jewelry_Style-Earrings-Huggie.svg',
+    During: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/d4aeb218938c97c7319d50b7208368c6074033af/assets/UI/Jewelry_Style-Earrings-During.svg',
   },
   Ring: {
-    Solitaire: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Ring-Solitaire.svg',
-    Band: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Ring-Band.svg',
-    'Three-stone': 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Ring-Three_Stone.svg',
-    Bezel: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Ring-Bezel.svg',
+    Solitaire: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/408ddc8d563238a734ab30d6b1d5f43f0cbcf0e6/assets/UI/Jewelry_Style-Ring-Solitaire.svg',
+    Band: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/408ddc8d563238a734ab30d6b1d5f43f0cbcf0e6/assets/UI/Jewelry_Style-Ring-Band.svg',
+    'Three-stone': 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/408ddc8d563238a734ab30d6b1d5f43f0cbcf0e6/assets/UI/Jewelry_Style-Ring-Three_Stone.svg',
+    Bezel: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/408ddc8d563238a734ab30d6b1d5f43f0cbcf0e6/assets/UI/Jewelry_Style-Ring-Bezel.svg',
   },
   Pendant: {
-    Solitaire: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Pendant-Solitaire.svg',
-    Locket: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Pendant-Locket.svg',
+    Solitaire: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/408ddc8d563238a734ab30d6b1d5f43f0cbcf0e6/assets/UI/Jewelry_Style-Pendant-Solitaire.svg',
+    Locket: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/408ddc8d563238a734ab30d6b1d5f43f0cbcf0e6/assets/UI/Jewelry_Style-Pendant-Locket.svg',
+    Medallion: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/408ddc8d563238a734ab30d6b1d5f43f0cbcf0e6/assets/UI/Jewelry_Style-Pendant-Medallion.svg',
   },
   Necklace: {
-    Chain: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Necklace-Chain.svg',
-    Tennis: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Necklace-Tennis.svg',
-    Station: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Necklace-Station.svg',
-    Collar: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Necklace-Collar.svg',
-    Lariat: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/a28adccbbaed96d575488f40992883ee2906e1ec/assets/UI/Jewelry_Style-Necklace-Lariat.svg',
+    Chain: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/d4aeb218938c97c7319d50b7208368c6074033af/assets/UI/Jewelry_Style-Necklace-Chain.svg',
+    Tennis: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/408ddc8d563238a734ab30d6b1d5f43f0cbcf0e6/assets/UI/Jewelry_Style-Necklace-Tennis.svg',
+    Station: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/408ddc8d563238a734ab30d6b1d5f43f0cbcf0e6/assets/UI/Jewelry_Style-Necklace-Station.svg',
+    Collar: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/d4aeb218938c97c7319d50b7208368c6074033af/assets/UI/Jewelry_Style-Necklace-Collar.svg',
+    Lariat: 'https://raw.githubusercontent.com/chateaudivoire-design/design-concept/d4aeb218938c97c7319d50b7208368c6074033af/assets/UI/Jewelry_Style-Necklace-Lariat.svg',
   },
 };
 function stylePillImageURI(type, style) {
